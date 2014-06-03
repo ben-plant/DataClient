@@ -1,46 +1,76 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="com.cyanon.dataclient.dataclient.MainActivity"
-    android:background="#55acee">
+<FrameLayout
+    android:layout_width="wrap_content"
+    android:layout_height="fill_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <LinearLayout
-        android:orientation="vertical"
+    <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+        android:layout_height="match_parent"
+        android:id="@+id/tableLayout"
+        android:gravity="center|fill_horizontal|fill_vertical"
+        android:layout_gravity="right|center_vertical">
 
-        <FrameLayout
+        <TableRow
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="fill_parent" >
 
             <TextView
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Since it was switched on, this handset has used:"
+                android:text="Since"
                 android:id="@+id/textView"
                 android:singleLine="false"
-                android:gravity="center"
                 android:fontFamily="sans-serif-light"
-                android:textSize="80px" />
-        </FrameLayout>
+                android:textSize="40dp"
+                android:minLines="2"
+                android:gravity="center" />
+        </TableRow>
 
-        <FrameLayout
+        <TableRow
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Medium Text"
+                android:id="@+id/timeStamp"
+                android:textAlignment="center"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:textSize="30dp"
+                android:layout_gravity="center_horizontal" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" >
 
             <TextView
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="I've used"
+                android:id="@+id/textView2"
+                android:singleLine="false"
+                android:gravity="center"
+                android:fontFamily="sans-serif-light"
+                android:textSize="40dp"
+                android:minLines="2" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="Large Text"
                 android:id="@+id/textViewGB"
-                android:layout_alignParentTop="true"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentEnd="true"
@@ -48,10 +78,10 @@
                 android:maxLines="1"
                 android:numeric="decimal"
                 android:textAlignment="center"
-                android:textSize="400px"
-                android:gravity="center" />
-        </FrameLayout>
-
-    </LinearLayout>
-
-</RelativeLayout>
+                android:textSize="100dp"
+                android:gravity="center"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp" />
+        </TableRow>
+    </TableLayout>
+</FrameLayout>

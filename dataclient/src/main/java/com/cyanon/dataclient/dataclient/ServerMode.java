@@ -8,6 +8,8 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.SystemClock;
+import android.text.format.Time;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
@@ -24,6 +26,8 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class ServerMode extends Activity {
+
+    //TODO: Make the app handle not being on Wifi more reasonably : currently throws NPE at L208
 
     private final static String LOG_HANDLE = "ServerMode";
 
@@ -47,7 +51,9 @@ public class ServerMode extends Activity {
     private Context context = this;
 
     final DecimalFormat dataFormat = new DecimalFormat();
+    private Time time = new Time();
     private TextView gb;
+    private TextView ts;
 
     public ServerMode() {
     }
@@ -76,8 +82,14 @@ public class ServerMode extends Activity {
 
         socketPuller.execute();
 
+        String timeFormat = new String("%d/%m/%Y - %H:%M:%S");
+        time.set(System.currentTimeMillis() - SystemClock.elapsedRealtime());
+
         gb = (TextView)findViewById(R.id.textViewGB);
+        ts = (TextView)findViewById(R.id.timeStamp);
+
         gb.setText(dataFormat.format(dch.getDataUsedMB()) + "MB"); //gb
+        ts.setText(time.format(timeFormat)); //timestamp
 
         //Toast.makeText(context, "Server started successfully!", Toast.LENGTH_LONG).show();
     }
@@ -159,7 +171,7 @@ public class ServerMode extends Activity {
         }
     }
 
-    private class ClientConnector extends AsyncTask<Object, Void, Void> //TODO: optimise for multiple clients
+    private class ClientConnector extends AsyncTask<Object, Void, Void> //<--------------------------------------------------- TODO: optimise for multiple clients
     {
         protected Void doInBackground(Object... params) {
             try {
@@ -193,13 +205,15 @@ public class ServerMode extends Activity {
     {
         protected Void doInBackground(Object... params) {
             try {
-                while (READING_FROM_CLIENTS) {
-                    float incomingText;
-                    float dataUsed = 0;
+                if (connectedInputStreams.size() > 0) {
+                    while (READING_FROM_CLIENTS) {
+                        float incomingText;
+                        float dataUsed = 0;
 
-                    for (BufferedReader reader : connectedInputStreams) {
-                        incomingText = Float.parseFloat(reader.readLine());
-                        runOnUiThread(updateUIText(dataFormat.format((dataUsed += incomingText) / 1024)));
+                        for (BufferedReader reader : connectedInputStreams) {
+                            incomingText = Float.parseFloat(reader.readLine());
+                            runOnUiThread(updateUIText(dataFormat.format((dataUsed += incomingText) / 1024)));
+                        }
                     }
                 }
             }

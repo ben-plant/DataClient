@@ -1,6 +1,7 @@
 package com.cyanon.dataclient.dataclient.general;
 
 import android.os.SystemClock;
+import android.util.Log;
 
 public class DateTimeHandler {
 
@@ -11,19 +12,15 @@ public class DateTimeHandler {
 
     }
 
-    public long getSystemTime()
+    public static String getBootTimeStamp()
     {
-        return SystemClock.elapsedRealtime();
-    }
-
-    public String getBootTimestamp()
-    {
-        long seconds = ((this.getSystemTime() + 500) / 1000);
+        long seconds = ((System.currentTimeMillis() - SystemClock.elapsedRealtime()) / 1000);
         long minutes = seconds / 60;
         long hours   = minutes / 60;
         long days    = hours   / 24;
 
-        return String.format("%1$02d days, %2$02d hours, %3$02d minutes, %4$02d seconds", days, hours % 24, minutes % 60, seconds % 60);
+        Log.v(DateTimeHandler.class.getSimpleName(), String.format("%1$02d days ago at %2$02d:%3$02d", seconds, hours % 24, minutes % 60));
+        return String.format("%1$02d days ago at %2$02d:%3$02d", days, hours % 24, minutes % 60);
     }
 
 }
