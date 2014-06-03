@@ -1,0 +1,65 @@
+<GridLayout
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="20px">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="When you start the other handset in 'Displays data count' mode, it briefly shows you a message at the bottom including the IP to type in this box"
+            android:id="@+id/textView"
+            android:padding="20px" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:padding="20px">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:id="@+id/ipAddrField"
+            android:hint="IP address: 192.168.1.??"
+            android:inputType="text" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:padding="20px">
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Connect to this IP"
+            android:id="@+id/connectButton"
+            android:padding="20px" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:padding="20px">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="298dp"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:id="@+id/textView2"
+            android:singleLine="false"
+            android:text="When you've done this, MINIMIZE this app so it can read data in the background. Not having to do this is coming soon."
+            android:padding="20px"
+            android:textSize="100px"
+            android:textColor="#ff0000" />
+    </FrameLayout>
+
+</GridLayout>
