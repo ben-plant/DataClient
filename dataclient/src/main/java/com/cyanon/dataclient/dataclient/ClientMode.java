@@ -93,6 +93,7 @@ public class ClientMode extends Activity {
                         if (seconds != lastSeconds) { //which it wont
                             float currData = DataClientHandler.getDataUsedKB();
                             float diffData = currData - oldData;
+                            Log.v(LOG_HANDLE, "Writing " + diffData + " to socket...");
                             output.println(diffData);
                             output.flush();
 

@@ -35,6 +35,10 @@ public class ServerMode extends Activity {
     private static boolean ACCEPTING_NEW_CLIENTS = false; //<------------------------ SWITCH CLIENT INTAKE ON OR OFF
     private static boolean READING_FROM_CLIENTS = false;  //<------------------------ SWITCH READING PORTS ON OR OFF
 
+    protected ServerSocketInit bootServerSocket;
+    protected ClientConnector connectClient;
+    protected PullFromSockets socketPuller;
+
     private ServerSocket sSocket;
     private ArrayList<Socket> connectedClients;
     private ArrayList<BufferedReader> connectedInputStreams;
@@ -55,6 +59,8 @@ public class ServerMode extends Activity {
     private TextView gb;
     private TextView ts;
 
+    public float dataUsed = 0;
+
     public ServerMode() {
     }
 
@@ -62,9 +68,9 @@ public class ServerMode extends Activity {
     {
         super.onCreate(savedInstanceState);
 
-        ServerSocketInit bootServerSocket = new ServerSocketInit();
-        ClientConnector connectClient = new ClientConnector();
-        PullFromSockets socketPuller = new PullFromSockets();
+        bootServerSocket = new ServerSocketInit();
+        connectClient = new ClientConnector();
+        socketPuller = new PullFromSockets();
         bootServerSocket.execute();
         connectClient.execute();
 
@@ -79,8 +85,6 @@ public class ServerMode extends Activity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
         setContentView(R.layout.main_server);
-
-        socketPuller.execute();
 
         String timeFormat = new String("%d/%m/%Y - %H:%M:%S");
         time.set(System.currentTimeMillis() - SystemClock.elapsedRealtime());
@@ -182,6 +186,7 @@ public class ServerMode extends Activity {
                     }
                     else {
                         connectedInputStreams = new ArrayList<BufferedReader>();
+
                         while (ACCEPTING_NEW_CLIENTS) {
                             Socket incomingSocket = sSocket.accept();
                             runOnUiThread(SharedMethods.postToast("Client connected! Addr: " + incomingSocket.getInetAddress(), context));
@@ -191,6 +196,18 @@ public class ServerMode extends Activity {
                             connectedInputStreams.add(numberOfConnectedClients, input);
 
                             numberOfConnectedClients++;
+
+                            while (connectedInputStreams.size() > 0) {
+                                while (READING_FROM_CLIENTS) {
+                                    float incomingText;
+
+                                    for (BufferedReader reader : connectedInputStreams) {
+                                        incomingText = Float.parseFloat(reader.readLine());
+                                        dataUsed += incomingText;
+                                        runOnUiThread(updateUIText(dataFormat.format(dataUsed / 1024)));
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -199,13 +216,19 @@ public class ServerMode extends Activity {
             }
             return null;
         }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            runOnUiThread(SharedMethods.postToast("Pulling from connected sockets...", context));
+            socketPuller.execute();
+        }
     }
 
     private class PullFromSockets extends AsyncTask<Object, Void, Void>
     {
         protected Void doInBackground(Object... params) {
             try {
-                if (connectedInputStreams.size() > 0) {
+                while (connectedInputStreams.size() > 0) {
                     while (READING_FROM_CLIENTS) {
                         float incomingText;
                         float dataUsed = 0;
